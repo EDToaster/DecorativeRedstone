@@ -1,0 +1,24 @@
+/*
+###                                  ###
+### Be sure to review ALL of the     ###
+### data below, especially everwhere ###
+### that says modid!                 ###
+###                                  ###
+*/
+
+pluginManagement {
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        gradlePluginPortal()
+    }
+}
+
+// change this!
+rootProject.name = 'modid'
+
+// fabric forge and common folders, leave this as is
+include 'forge', 'fabric', 'common'
+

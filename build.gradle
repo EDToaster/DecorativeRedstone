@@ -1,0 +1,45 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.0.0" apply false
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+
+    group = parent.group
+    version = parent.version
+
+    def targetJavaVersion = project.java_version as int
+    java {
+        def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+        if (JavaVersion.current() < javaVersion) {
+            toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+        if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+            options.release = targetJavaVersion
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+configure(subprojects - project(":common")) {
+    publishing {
+        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+        repositories {
+
+        }
+    }
+}
